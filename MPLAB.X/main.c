@@ -2,7 +2,7 @@
 Copyright 2016 Microchip Technology Inc. (www.microchip.com)
 
  MSD Loader and CDC Interface for the MPLAB XPRESS Evaluation Board
-   
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -14,10 +14,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
- 
+
 *******************************************************************************/
 
-/** INCLUDES *******************************************************/
 #include "system.h"     // find release MAJOR/MINOR and DATE in here!!!
 #include "system_config.h"
 
@@ -53,18 +52,18 @@ MAIN_RETURN main(void)
          * top of the while loop. */
         if( USBGetDeviceState() < CONFIGURED_STATE )
         {   /* USB connection not available or not yet complete */
-            // implement nMCLR button 
+            // implement nMCLR button
             if ( BUTTON_IsPressed(BUTTON_S1)) {
-                ICSP_nMCLR = SLAVE_RESET;
+                ICSP_slaveReset();
                 LED_Off(GREEN_LED);     // RED = target RESET
                 LED_On (RED_LED);
             }
-            else { // release 
-                ICSP_nMCLR = SLAVE_RUN;
-                LED_Off(GREEN_LED);   // both LED off, not connected
-                LED_Off(RED_LED);
+            else { // release
+                ICSP_slaveRun();
+                LED_Off(GREEN_LED);     // not connected, battery powered?
+                LED_Off(RED_LED);       // save energy, both LED  off
             }
-            
+
             /* Jump back to the top of the while loop. */
             continue;
         }
@@ -75,21 +74,24 @@ MAIN_RETURN main(void)
          * thus just continue back to the start of the while loop. */
         if( USBIsDeviceSuspended() == true )
         {
-            /* Jump back to the top of the while loop. */
-            continue;
+            LED_Off(GREEN_LED);         // save energy, turn both LED  off
+            LED_Off(RED_LED);
+            ICSP_slaveReset();
+            continue;                   // jump back to the top of the loop
         }
-        // implement nMCLR button
+
+        // Normal operating mode (device connected)
+        // implement RESET button
         if ( BUTTON_IsPressed(BUTTON_S1)) {
-            LUNSoftDetach(0);       // mark the media as temporarily unavailable 
-            ICSP_nMCLR = SLAVE_RESET;
-            LED_Off(GREEN_LED);     // turn off RED LED to indicate ready for download
-            LED_On (RED_LED);
-            DIRECT_Initialize();    // reset the programming state machine
+            LUNSoftDetach(0);       // mark the media as temporarily unavailable
+
+            ICSP_slaveReset();
+            LVP_init();             // reset the programming state machine
         }
-        else { // simply act as a slave reset 
+        else { // button released
             LUNSoftAttach(0);                       // mark the media as available
-            if ( !DIRECT_ProgrammingInProgress()) {  // do not release during prog.!
-                ICSP_nMCLR = SLAVE_RUN;
+            if ( !LVP_inProgress()) {  // do not release during prog.!
+                ICSP_slaveRun();
                 LED_On(GREEN_LED);   // turn off RED LED to indicate ready for download
                 LED_Off(RED_LED);
             }

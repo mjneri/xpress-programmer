@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-*******************************************************************************/
+ *******************************************************************************/
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -31,21 +31,23 @@ limitations under the License.
 
 #define ICSP_TRIS_DAT       TRISBbits.TRISB3
 #define ICSP_DAT            LATBbits.LATB3
+#define ICSP_DAT_IN         PORTBbits.RB3
 #define ICSP_TRIS_CLK       TRISBbits.TRISB2
 #define ICSP_CLK            LATBbits.LATB2
 #define ICSP_TRIS_nMCLR     TRISBbits.TRISB4
 #define ICSP_nMCLR          LATBbits.LATB4
 
-#define  LVP_init() LVP_exit();
+#define  LVP_init()         LVP_exit();
 
-void LVP_enter( void);
-void LVP_exit( void);
-void LVP_addressLoad( uint16_t address);
-void LVP_bulkErase( void);
-void LVP_skip( uint16_t count);
+void ICSP_slaveReset(void);
+void ICSP_slaveRun(void);
+void LVP_enter(void);
+void LVP_exit(void);
 bool LVP_inProgress(void);
-void LVP_rowWrite( uint16_t *buffer, uint8_t n);
-void LVP_cfgWrite( uint16_t *buffer, uint8_t n);
+void LVP_packRow(uint32_t address, uint8_t *data, uint8_t data_count);
+void LVP_programLastRow(void);
+uint16_t LVP_getInfoSize(void);
+void LVP_getInfo(char* buffer, uint16_t seg);
 
 #endif	/* LVP_H */
 

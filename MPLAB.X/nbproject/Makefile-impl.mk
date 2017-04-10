@@ -27,11 +27,11 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=MPLAB.X
 
 # Active Configuration
-DEFAULTCONF=XPRESS
+DEFAULTCONF=XPRESS_univ
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=XPRESS 
+ALLCONFS=XPRESS XPRESS_univ 
 
 
 # build
@@ -46,12 +46,14 @@ ALLCONFS=XPRESS
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
 	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=XPRESS clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=XPRESS_univ clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
 	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=XPRESS build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=XPRESS_univ build
 
 
 

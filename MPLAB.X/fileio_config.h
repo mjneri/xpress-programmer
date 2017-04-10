@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifndef _FS_DEF_
 #define _FS_DEF_
@@ -82,40 +82,21 @@ limitations under the License.
 //bits (for microcontrollers that use flash for storing the configuration bits,
 //see device datasheet). This can be accomplished by using a modified linker script,
 //which protects the flash page with the configuration bits (if applicable), or,
-//by carefully choosing the DRV_FILEIO_INTERNAL_FLASH_CONFIG_FILES_ADDRESS and DRV_FILEIO_INTERNAL_FLASH_CONFIG_DRIVE_CAPACITY,
+//by carefully choosing the DRV_CONFIG_FILES_ADDRESS and DRV_CONFIG_DRIVE_CAPACITY,
 //to make sure the MSD volume does extend into the erase page with the configuration
 //bits.
-#define DRV_FILEIO_INTERNAL_FLASH_CONFIG_DRIVE_CAPACITY 256          //Number of 512 byte sectors of useable drive volume
-
-
-//--------------------------------------------------------------------------
-//Starting Address of the MSD Volume.
-//--------------------------------------------------------------------------
-//Note: Make certain that this starting address is aligned with the start
-//of a flash erase block.  It is important to make certain that no part of
-//the MSD volume overlaps any portion of a flash erase page which is used
-//for storing firmware program code.  When the host writes a sector to the
-//MSD volume, the firmware must erase an entire page of flash in order to
-//do the write.  If the sector being written happened to share a flash erase
-//page with this firmware, unpredictable results would occur, since part of
-//firmware would also end up getting erased during the write to the MSD volume.
-//#define DRV_FILEIO_INTERNAL_FLASH_CONFIG_FILES_ADDRESS 0x2000
-
+#define DRV_CONFIG_DRIVE_CAPACITY 4096  // Number of sectors of useable drive volume
+#define DRV_SECTORS_PER_CLUSTER     8   // Number of sectors in each cluster
 
 //--------------------------------------------------------------------------
 //Maximum files supported
 //--------------------------------------------------------------------------
-//DRV_FILEIO_CONFIG_INTERNAL_FLASH_MAX_NUM_FILES_IN_ROOT must be a multiple of 16
+//DRV_MAX_NUM_FILES_IN_ROOT must be a multiple of 16
 //Note: Even if DRV_FILEIO_CONFIG_INTERNAL_FLASH_MAX_NUM_FILES_IN_ROOT is 16, this does not
 //necessarily mean the drive will always work with 16 files.  The drive will
 //suppport "up to" 16 files, but other limits could be hit first, even before
 //the drive is full.  The RootDirectory0[] sector could get full with less
 //files, especially if the files are using long filenames.
-#define DRV_FILEIO_CONFIG_INTERNAL_FLASH_MAX_NUM_FILES_IN_ROOT 16
+#define DRV_MAX_NUM_FILES_IN_ROOT 16
 
-//name and extern definition for the master boot record
-//extern const uint8_t MasterBootRecord[FILEIO_CONFIG_MEDIA_SECTOR_SIZE];
-//#define MASTER_BOOT_RECORD_ADDRESS &MasterBootRecord[0]
-
-//#define DRV_FILEIO_CONFIG_INTERNAL_FLASH_WRITE_PROTECT
 #endif
