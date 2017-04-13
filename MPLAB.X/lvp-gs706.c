@@ -264,7 +264,45 @@ void ICSP_MovLit(uint16_t lit, uint8_t reg) {
 //    __delay_ms(WRITE_TIME);
 //}
 
-void ICSP_cfgWrite(uint16_t *buffer, uint24_t address, uint8_t count) {
+void ICSP_writeFBOOT(uint24_t w0) {
+    // Step 1: Reset PC
+    ICSP_setPC();
+
+    // Step 2: Set the TBLPG register for writing to the latches  (@FA0000)
+    ICSP_Cmd(0x200FAC);     // MOV #0xFA, W12
+    ICSP_Cmd(0x8802AC);     // MOV W12, TBLPG
+
+    // Step 3: load data double words
+    ICSP_MovLit(w0 & 0xffff, 0);// MOV #<LSW0>, W0
+    ICSP_MovLit(w0 >> 16, 1);   // MOV #<HSW0>, W1
+
+    // Step 4: write the latches
+    ICSP_Cmd(0xEB0300);   // CLR W6
+    ICSP_Cmd(0);          // NOP
+    ICSP_Cmd(0xBB0B00);   // TBLWTL W0, [W6]
+    ICSP_Cmd(0);          // NOP
+    ICSP_Cmd(0);          // NOP
+    ICSP_Cmd(0xBB9B01);   // TBLWTH W1, [W6++]
+    ICSP_Cmd(0);          // NOP
+    ICSP_Cmd(0);          // NOP
+
+    // Step 5: check if legal combination of FBOOT<1:0>
+    ICSP_Cmd(0xA31000);     // BTST.C   W0, 1
+    ICSP_Cmd(0xB08000);     // ADDC     #0, W0
+    ICSP_Cmd(0xDD004E);     // SL       W0, 14, W0
+    ICSP_Cmd(0x700068);     // IORL     W0, 8, W0
+    ICSP_Cmd(0x883940);     // MOV      W0, NVMCON
+    ICSP_Cmd(0);            // NOP
+    ICSP_Cmd(0);            // NOP
+
+    // Step 7: Initiate the write cycle.
+     ICSP_unlockWR();
+    __delay_ms( CFG_TIME);
+    ICSP_setPC();
+}
+
+void ICSP_rowWrite(uint16_t *row, uint24_t address, uint8_t count) {
+    count &= 0xfc;  // ensure multiples of 4 words in row buffer
     // Step 1: Exit the Reset vector.
     ICSP_setPC();
 
@@ -274,12 +312,12 @@ void ICSP_cfgWrite(uint16_t *buffer, uint24_t address, uint8_t count) {
 
     while( count > 0)
     {
-        count -= 4;             // 2 x double words at a time
+        count -= 4;             // 2 x double words = 4 words at a time
         // Step 3: load the words
-        ICSP_MovLit(address, 0);    // MOV #<LSW0>, W0
-        ICSP_MovLit(0x0055, 1);    // MOV #<HSW0>, W1
-        ICSP_MovLit(count, 2);    // MOV #<LSW1>, W2
-        ICSP_MovLit(0x00AA, 3);    // MOV #<HSW1>, W3
+        ICSP_MovLit(*row++, 0);    // MOV #<LSW0>, W0
+        ICSP_MovLit(*row++, 1);    // MOV #<HSW0>, W1
+        ICSP_MovLit(*row++, 2);    // MOV #<LSW1>, W2
+        ICSP_MovLit(*row++, 3);    // MOV #<HSW1>, W3
 
         // Step 4: write the latches
         ICSP_Cmd(0xEB0300);   // CLR W6
@@ -314,7 +352,7 @@ void ICSP_cfgWrite(uint16_t *buffer, uint24_t address, uint8_t count) {
          ICSP_unlockWR();
         __delay_ms( CFG_TIME);
         ICSP_setPC();
-        address += 2;
+        address += 4;
     }
 
 
@@ -385,6 +423,8 @@ void LVP_write(void) {
     if (!LVP_inProgress()) {
         LVP_enter();
         ICSP_bulkErase();
+        ICSP_writeFBOOT(0xffffff);  // default single flash configuration
+        ICSP_rowWrite(row, 0, 4);   // partition signature 
     }
     if (row_address == -1) {
         /* do nothing */
@@ -393,8 +433,7 @@ void LVP_write(void) {
 //        ICSP_cfgWrite( row, CFG_NUM);
     }
     else { // normal row programming sequence
-//        ICSP_addressLoad(row_address);
-        ICSP_cfgWrite(row, row_address, ROW_SIZE);
+        ICSP_rowWrite(row, row_address, ROW_SIZE);
     }
 }
 
@@ -486,7 +525,7 @@ void catHexDWord(char *buffer, uint24_t addr) {
 
 uint16_t LVP_getInfoSize(void) {
     // a multiple of 64-char segments
-    return (3 + 4) * 64;      // ensure < 512
+    return (3 + 5) * 64;     // < 512
 }
 
 void read_DevID(char *buffer) {
@@ -520,7 +559,7 @@ void read_UID(char *buffer) {
     strcat(buffer, "\n\nMem:");
 }
 
-void read_flash(char *buffer, uint8_t seg) {
+void read_flash(char *buffer, uint16_t seg) {
     uint24_t addr = 0x00 + (seg << 3);
     *buffer++ = '\n';
     utohex(buffer, addr);

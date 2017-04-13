@@ -220,7 +220,7 @@ const uint8_t entry0[ ROOT_ENTRY_SIZE] = {
  const  uint8_t entry2[ ROOT_ENTRY_SIZE] = {
     'D','E','V','I','C','E',' ',' ',    // File name (exactly 8 characters)
     'T','X','T',                        // File extension (exactly 3 characters)
-    0x21,           // specify this entry as a read-only file
+    0x20,           // specify this entry as a normal file
     0x00,           // Reserved
     0x00,           // Creation time, fine res 10 ms units (0-199)
     TIMEL(MAJOR, MINOR, 0),     // Creation time, hour/min/sec
@@ -237,8 +237,8 @@ const uint8_t entry0[ ROOT_ENTRY_SIZE] = {
     DATEL(YEAR, MONTH, DAY),    // Last Modified date, YMD
     DATEH(YEAR, MONTH, DAY),    // Last Modified date, YMD
 
-    0x03, 0x00,     // First FAT cluster (#3 is the next available)
-    64, 0x00, 0x00, 0x00,  // device info file size (default)
+    0x03, 0x00,                 // First FAT cluster (#3 is the next available)
+    64, 0x00, 0x00, 0x00,       // device info file size (default)
 };
 
 void RootRecordInit( void)

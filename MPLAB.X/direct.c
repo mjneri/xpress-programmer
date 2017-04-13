@@ -93,24 +93,20 @@ FILEIO_MEDIA_INFORMATION * DIRECT_MediaInitialize(void* config)
 uint8_t DIRECT_SectorRead(void* config, uint32_t sector_addr, uint8_t* buffer, uint8_t seg)
 {
     // Read a sector worth of data, and copy it to the specified RAM "buffer"
-    if      ( 0 == sector_addr)     MasterBootRecordGet( buffer, seg);
-    else if ( 1 == sector_addr)     VolumeBootRecordGet( buffer, seg);
-    else if ( 2 == sector_addr)     {
-        FATRecordGet( buffer, seg);
-    }
-    else if ( 3 == sector_addr)     {
-        RootRecordGet( buffer, seg);
-    }
+    if      ( 0 == sector_addr)     MasterBootRecordGet(buffer, seg);
+    else if ( 1 == sector_addr)     VolumeBootRecordGet(buffer, seg);
+    else if ( 2 == sector_addr)     FATRecordGet(buffer, seg);
+    else if ( 3 == sector_addr)     RootRecordGet(buffer, seg);
     else {
         memset(buffer, '\0', MSD_IN_EP_SIZE); // empty buffer
         if ( 4 == sector_addr) {
             // Service README.HTM
             if ( seg < ( (readme_size() + 63) % 64) )
-                strncpy( (void*)buffer,
-                         (void*)&readme[seg*64],
-                         64);  // at most 64 bytes at a time
+                strncpy((void*)buffer,
+                        (void*)&readme[seg*64],
+                        64);  // at most 64 bytes at a time
         }
-        else if (( 4 + DRV_SECTORS_PER_CLUSTER) == sector_addr){
+        else if ((4 + DRV_SECTORS_PER_CLUSTER) == sector_addr) {
             // service device.txt info
             LVP_getInfo(buffer, seg);
         }
