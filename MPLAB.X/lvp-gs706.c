@@ -424,14 +424,14 @@ void LVP_write(void) {
         LVP_enter();
         ICSP_bulkErase();
         ICSP_writeFBOOT(0xffffff);  // default single flash configuration
-        ICSP_rowWrite(row, 0, 4);   // partition signature 
+        ICSP_rowWrite(row, 0, 4);   // partition signature
     }
     if (row_address == -1) {
         /* do nothing */
     }
-    else if (row_address >= CFG_ADDRESS) { // use the special cfg word sequence
+//    else if (row_address >= CFG_ADDRESS) { // use the special cfg word sequence
 //        ICSP_cfgWrite( row, CFG_NUM);
-    }
+//    }
     else { // normal row programming sequence
         ICSP_rowWrite(row, row_address, ROW_SIZE);
     }
@@ -541,10 +541,14 @@ void read_Config(char *buffer) {
     // read the CONFIG
     strcat(buffer, "\n\nConfiguration:\n");
     catHexWord(buffer, CFG_ADDRESS+0);
-    catHexWord(buffer, CFG_ADDRESS+16);
-    catHexWord(buffer, CFG_ADDRESS+24);
-    catHexWord(buffer, CFG_ADDRESS+28);
-    catHexWord(buffer, CFG_ADDRESS+32);
+    catHexWord(buffer, CFG_ADDRESS+0x10);
+    catHexWord(buffer, CFG_ADDRESS+0x18);
+    catHexWord(buffer, CFG_ADDRESS+0x1c);
+    catHexWord(buffer, CFG_ADDRESS+0x20);
+    catHexWord(buffer, CFG_ADDRESS+0x28);
+    catHexWord(buffer, CFG_ADDRESS+0x2c);
+    catHexWord(buffer, CFG_ADDRESS+0x30);
+    catHexWord(buffer, CFG_ADDRESS+0x7c);
 }
 
 void read_UID(char *buffer) {
