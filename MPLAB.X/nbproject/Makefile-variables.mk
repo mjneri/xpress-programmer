@@ -4,17 +4,17 @@
 # NOCDDL
 #
 CND_BASEDIR=`pwd`
-# XPRESS configuration
-CND_ARTIFACT_DIR_XPRESS=dist/XPRESS/production
-CND_ARTIFACT_NAME_XPRESS=MPLAB.X.production.hex
-CND_ARTIFACT_PATH_XPRESS=dist/XPRESS/production/MPLAB.X.production.hex
-CND_PACKAGE_DIR_XPRESS=${CND_DISTDIR}/XPRESS/package
-CND_PACKAGE_NAME_XPRESS=mplab.x.tar
-CND_PACKAGE_PATH_XPRESS=${CND_DISTDIR}/XPRESS/package/mplab.x.tar
-# XPRESS_univ configuration
-CND_ARTIFACT_DIR_XPRESS_univ=dist/XPRESS_univ/production
-CND_ARTIFACT_NAME_XPRESS_univ=MPLAB.X.production.hex
-CND_ARTIFACT_PATH_XPRESS_univ=dist/XPRESS_univ/production/MPLAB.X.production.hex
-CND_PACKAGE_DIR_XPRESS_univ=${CND_DISTDIR}/XPRESS_univ/package
-CND_PACKAGE_NAME_XPRESS_univ=mplab.x.tar
-CND_PACKAGE_PATH_XPRESS_univ=${CND_DISTDIR}/XPRESS_univ/package/mplab.x.tar
+# XPRESS_18855 configuration
+CND_ARTIFACT_DIR_XPRESS_18855=dist/XPRESS_18855/production
+CND_ARTIFACT_NAME_XPRESS_18855=MPLAB.X.production.hex
+CND_ARTIFACT_PATH_XPRESS_18855=dist/XPRESS_18855/production/MPLAB.X.production.hex
+CND_PACKAGE_DIR_XPRESS_18855=${CND_DISTDIR}/XPRESS_18855/package
+CND_PACKAGE_NAME_XPRESS_18855=mplab.x.tar
+CND_PACKAGE_PATH_XPRESS_18855=${CND_DISTDIR}/XPRESS_18855/package/mplab.x.tar
+# univ_GS706 configuration
+CND_ARTIFACT_DIR_univ_GS706=dist/univ_GS706/production
+CND_ARTIFACT_NAME_univ_GS706=MPLAB.X.production.hex
+CND_ARTIFACT_PATH_univ_GS706=dist/univ_GS706/production/MPLAB.X.production.hex
+CND_PACKAGE_DIR_univ_GS706=${CND_DISTDIR}/univ_GS706/package
+CND_PACKAGE_NAME_univ_GS706=mplab.x.tar
+CND_PACKAGE_PATH_univ_GS706=${CND_DISTDIR}/univ_GS706/package/mplab.x.tar

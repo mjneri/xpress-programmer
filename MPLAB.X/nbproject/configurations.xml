@@ -102,7 +102,7 @@
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="XPRESS" type="2">
+    <conf name="XPRESS_18855" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC18LF25K50</targetDevice>
@@ -321,7 +321,7 @@
         </XC8-config-global>
       </item>
     </conf>
-    <conf name="XPRESS_univ" type="2">
+    <conf name="univ_GS706" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC18LF25K50</targetDevice>
@@ -329,7 +329,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.35</languageToolchainVersion>
+        <languageToolchainVersion>1.40</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <compileType>
