@@ -57,8 +57,8 @@ void ICSP_slaveReset(void){
 }
 
 void ICSP_slaveRun(void){
-    ICSP_TRIS_nMCLR = PIN_INPUT;
-    ICSP_nMCLR = SLAVE_RESET;
+    ICSP_nMCLR = SLAVE_RUN;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_init(void )
@@ -213,7 +213,7 @@ void LVP_exit(void)
 
 bool LVP_inProgress(void)
 {
-    return (ICSP_TRIS_nMCLR == SLAVE_RESET);
+    return (ICSP_nMCLR == SLAVE_RESET);
 }
 
 void LVP_write(void) {

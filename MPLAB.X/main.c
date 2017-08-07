@@ -91,8 +91,8 @@ MAIN_RETURN main(void)
         }
         else { // button released
             LUNSoftAttach(0);           // mark the media as available
-                LED_on(GREEN_LED);      // turn off RED LED to indicate ready for download
-                LED_off(RED_LED);
+            LED_on(GREEN_LED);          // turn off RED LED to indicate ready for download
+            LED_off(RED_LED);
             if (wasPressed){
                 ICSP_slaveRun();
                 wasPressed = false;
