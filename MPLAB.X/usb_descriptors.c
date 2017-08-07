@@ -95,14 +95,14 @@ const uint8_t configDescriptor1[]={
     
 //---------------IAD Descriptor------------------------------------
     /* Interface Association Descriptor: CDC Function 1*/ 
-	0x08,             //sizeof(USB_IAD_DSC), // Size of this descriptor in bytes 
-	0x0B,             // Interface assocication descriptor type 
-	CDC_COMM_INTF_ID, // The first associated interface 
-	2,                // Number of contiguous associated interface 
-	COMM_INTF,        // bInterfaceClass of the first interface 
-	ABSTRACT_CONTROL_MODEL, // bInterfaceSubclass of the first interface 
-	V25TER,           // bInterfaceProtocol of the first interface 
-	0,                // Interface string index 						
+    0x08,             //sizeof(USB_IAD_DSC), // Size of this descriptor in bytes 
+    0x0B,             // Interface assocication descriptor type 
+    CDC_COMM_INTF_ID, // The first associated interface 
+    2,                // Number of contiguous associated interface 
+    COMM_INTF,        // bInterfaceClass of the first interface 
+    ABSTRACT_CONTROL_MODEL, // bInterfaceSubclass of the first interface 
+    V25TER,           // bInterfaceProtocol of the first interface 
+    0,                // Interface string index 						
 
 //---------------CDC Function 1 Descriptors------------------------
 							

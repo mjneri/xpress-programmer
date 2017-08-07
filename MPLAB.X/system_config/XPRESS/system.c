@@ -22,9 +22,7 @@ limitations under the License.
 #include "system_config.h"
 #include "usb.h"
 #include "fileio.h"
-#include "uart.h"
 #include "lvp.h"
-
 
 /** CONFIGURATION Bits **********************************************/
 #pragma config PLLSEL   = PLL3X     // PLL Selection (3x clock multiplier)
@@ -83,7 +81,7 @@ limitations under the License.
 * Output: None
 *
 ********************************************************************/
-void SYSTEM_Initialize(void)
+void SYSTEM_init(void)
 {
     //Configure oscillator settings for clock settings compatible with USB
     //operation.  Note: Proper settings depends on USB speed (full or low).
@@ -93,16 +91,18 @@ void SYSTEM_Initialize(void)
     while(OSCCON2bits.PLLRDY != 1);   //Wait for PLL lock
     ACTCON = 0x90;  //Enable active clock tuning for USB operation
 
-    LED_Enable(GREEN_LED);
-    LED_Enable(RED_LED);
-    BUTTON_Enable(BUTTON_S1);
-    UART_Initialize();
-    LVP_init();
+    LED_enable(GREEN_LED);
+    LED_enable(RED_LED);
+    BUTTON_enable(BUTTON_S1);
+    UART_init();
+    ICSP_init();
+    ICSP_slaveRun();
     USBDeviceInit();	//usb_device.c.  Initializes USB module SFRs and firmware
     					//variables to known states.
+    USBDeviceAttach();
 }
 
-void interrupt SYS_InterruptHigh(void)
+void interrupt SYS_interruptHigh(void)
 {
     #if defined(USB_INTERRUPT)
         USBDeviceTasks();

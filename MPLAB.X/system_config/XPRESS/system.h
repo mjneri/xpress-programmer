@@ -18,17 +18,23 @@ limitations under the License.
 #include <xc.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "buttons.h"
+#include "leds.h"
+#include "uart.h"
+#include "pinout.h"
 
-#include "io_mapping.h"
+
+#define _XTAL_FREQ      48000000L
+#define GetSystemClock()    (_XTAL_FREQ/4)
 
 // semantic versioning
 #define MAJOR   1       // change only when incompatible changes are made
-#define MINOR   4       // change when adding functionality or fixing bugs
+#define MINOR   5       // change when adding functionality or fixing bugs
 
 // this release date
 #define YEAR            2017
-#define MONTH           4       // January=1, February=2 ..
-#define DAY             1       // Day:1..31
+#define MONTH           8       // January=1, February=2 ..
+#define DAY             6       // Day:1..31
 
 #define MAIN_RETURN void
 
@@ -38,7 +44,7 @@ limitations under the License.
  * Overview: Initializes the system.
  *
  ********************************************************************/
-void SYSTEM_Initialize(void);
+void SYSTEM_init(void);
 
 /*********************************************************************
  * Function: void SYSTEM_Tasks(void)

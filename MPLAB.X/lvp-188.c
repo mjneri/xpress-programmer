@@ -19,9 +19,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 *******************************************************************************/
-#include "lvp.h"
-#include "leds.h"
-#include "uart.h"
+#include "system.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -31,6 +29,7 @@ limitations under the License.
 #define CFG_FIRST   0x8007   // address of first config word
 #define DEV_ID      0x8006
 #define REV_ID      0x8005
+#define EE_ADDRESS  0xf000  // DATA EE area
 
 #define CFG_NUM      5       // number of config words
 #define WRITE_TIME   3       // mem write time ms
@@ -54,33 +53,32 @@ uint32_t row_address = -1;   // destination address of current row
 
 void ICSP_slaveReset(void){
     ICSP_nMCLR = SLAVE_RESET;
-    ICSP_TRIS_nMCLR = OUTPUT_PIN;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_slaveRun(void){
-    ICSP_TRIS_nMCLR = INPUT_PIN;
+    ICSP_TRIS_nMCLR = PIN_INPUT;
     ICSP_nMCLR = SLAVE_RESET;
 }
 
 void ICSP_init(void )
 {
-    ICSP_TRIS_DAT  = INPUT_PIN;
+    ICSP_TRIS_DAT  = PIN_INPUT;
     ICSP_CLK       = 0;
-    ICSP_TRIS_CLK  = OUTPUT_PIN;
-    ICSP_slaveRun();
+    ICSP_TRIS_CLK  = PIN_OUTPUT;
 }
 
 void ICSP_release(void)
 {
-    ICSP_TRIS_DAT  = INPUT_PIN;
-    ICSP_TRIS_CLK  = INPUT_PIN;
+    ICSP_TRIS_DAT  = PIN_INPUT;
+    ICSP_TRIS_CLK  = PIN_INPUT;
     ICSP_slaveRun();
 }
 
 void ICSP_sendCmd(uint8_t b)
 {
     uint8_t i;
-    ICSP_TRIS_DAT = OUTPUT_PIN;
+    ICSP_TRIS_DAT = PIN_OUTPUT;
     for( i=0; i<8; i++){        // 8-bit commands
         if ((b & 0x80) > 0)
             ICSP_DAT = 1;       // Msb first
@@ -100,7 +98,7 @@ void ICSP_sendData( uint24_t w)
     uint8_t i;
 
     w = (w <<1) & 0x7ffffe;     // add start and stop bits
-    ICSP_TRIS_DAT = OUTPUT_PIN;
+    ICSP_TRIS_DAT = PIN_OUTPUT;
     for( i=0; i < 24; i++){
         if ((w & 0x800000) > 0) // Msb first
             ICSP_DAT = 1;
@@ -128,7 +126,7 @@ uint16_t ICSP_getData( void)
 {
     uint8_t i;
     uint24_t w = 0;
-    ICSP_TRIS_DAT = INPUT_PIN;
+    ICSP_TRIS_DAT = PIN_INPUT;
     for( i=0; i < 24; i++){     // 24 bit
         ICSP_CLK = 1;
         w <<= 1;                // shift left
@@ -198,8 +196,8 @@ void ICSP_cfgWrite(uint16_t *buffer, uint8_t count)
 
 void LVP_enter(void)
 {
-    LED_On(RED_LED);
-    LED_Off(GREEN_LED);
+    LED_on(RED_LED);
+    LED_off(GREEN_LED);
 
     ICSP_init();                    // configure I/Os
     ICSP_signature();               // enter LVP mode
@@ -208,8 +206,8 @@ void LVP_enter(void)
 void LVP_exit(void)
 {
     ICSP_release();                 // release ICSP-DAT and ICSP-CLK
-    LED_Off(RED_LED);
-    LED_On(GREEN_LED);
+    LED_off(RED_LED);
+    LED_on(GREEN_LED);
     row_address = -1;
 }
 
@@ -331,45 +329,47 @@ void read_DevID(char *buffer) {
     strcat(buffer, "\n\nRev ID   : ");
     catHexWord(buffer, REV_ID);
     strcat(buffer, "\n\nFlash    : ");
-    strcat(buffer, " 64KB\n");
+    strcat(buffer, "16KB\n");
 }
 
 void read_Config(char *buffer) {
     // read the CONFIG
-    strcat(buffer, "\nData EE  : ");
-    strcat(buffer, "256B\n\nConfiguration:\n");
-    catHexWord(buffer, CFG_ADDRESS+0);
-    catHexWord(buffer, CFG_ADDRESS+1);
-    catHexWord(buffer, CFG_ADDRESS+2);
-    catHexWord(buffer, CFG_ADDRESS+3);
-    catHexWord(buffer, CFG_ADDRESS+4);
+    strcat(buffer, "\nConfiguration:\n");
+    catHexWord(buffer, CFG_FIRST+0);
+    catHexWord(buffer, CFG_FIRST+1);
+    catHexWord(buffer, CFG_FIRST+2);
+    catHexWord(buffer, CFG_FIRST+3);
+    catHexWord(buffer, CFG_FIRST+4);
+    strcat(buffer, "\n");
+    strcat(buffer, "\nData EE  : 256B\n");
 }
 
-void read_Flash(char *buffer, uint16_t seg) {
-    uint16_t addr = 0x00 + (seg<<4);
+void read_NVM(char *buffer, uint16_t seg) {
+//    uint16_t addr = 0x00 + (seg<<4);
+    uint16_t addr = EE_ADDRESS + (seg<<3);
     *buffer++ = '\n';
-    utohex(buffer, addr);
+    utohex(buffer, addr & 0x0fff);
     *(buffer+4) = ':';
     buffer += 5;
     for(uint8_t i=0; i<8; i++) {
         catHexWord(buffer, addr);
-        addr += 2;
+        addr += 1;
     }
 }
 
 void LVP_getInfo(char* buffer, uint16_t seg) {
     // read device information, returns a fixed (64 byte) string at a time
-    LVP_enter();
+    if (seg == 0) LVP_enter();
 
     switch( seg) {
         case 0: read_DevID(buffer); break;
         case 1: read_Config(buffer); break;
-        default:read_Flash(buffer, seg-2); break;
+        default:read_NVM(buffer, seg-2); break;
     }
 
     // padding with spaces (no \0 string terminator!)
     for(uint8_t i=strlen(buffer); i<64; i++)
         buffer[i] = ' ';
 
-    LVP_exit();
+    if (seg == 6) LVP_exit();
 }

@@ -2,7 +2,7 @@
 Copyright 2016 Microchip Technology Inc. (www.microchip.com)
 
  CDC Device Implementation
-  
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -38,11 +38,11 @@ static uint8_t USB_Out_Buffer[CDC_DATA_OUT_EP_SIZE];
 static uint8_t RS232_Out_Data[CDC_DATA_IN_EP_SIZE];
 
 unsigned char  NextUSBOut;
-unsigned char    NextUSBOut;
-unsigned char    LastRS232Out;  // Number of characters in the buffer
-unsigned char    RS232cp;       // current position within the buffer
-unsigned char RS232_Out_Data_Rdy = 0;
-USB_HANDLE  lastTransmission;
+unsigned char  NextUSBOut;
+unsigned char  LastRS232Out;  // Number of characters in the buffer
+unsigned char  RS232cp;       // current position within the buffer
+unsigned char  RS232_Out_Data_Rdy = 0;
+USB_HANDLE      lastTransmission;
 
 
 /******************************************************************************
@@ -82,7 +82,7 @@ void APP_SetLineCodingHandler(void)
 
         //Update the baudrate of the UART
         UART_baudrateSet(line_coding.dwDTERate);
-    //}        
+    //}
 }
 #endif
 
@@ -102,18 +102,16 @@ void APP_DeviceCDCEmulatorInitialize()
 {
     CDCInitEP();
 
-    
     line_coding.bCharFormat = 0;
     line_coding.bDataBits = 8;
     line_coding.bParityType = 0;
     line_coding.dwDTERate = 19200;
 
     unsigned char i;
-    UART_Initialize();
+    UART_init();
 
 // 	 Initialize the arrays
-	for (i=0; i<sizeof(USB_Out_Buffer); i++)
-    {
+	for (i=0; i<sizeof(USB_Out_Buffer); i++) {
 		USB_Out_Buffer[i] = 0;
     }
 
@@ -142,7 +140,7 @@ void APP_DeviceCDCEmulatorInitialize()
 ********************************************************************/
 void APP_DeviceCDCEmulatorTasks()
 {
-    
+
     if((USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)) return;
 
 	if (RS232_Out_Data_Rdy == 0)  // only check for new USB buffer if the old RS232 buffer is

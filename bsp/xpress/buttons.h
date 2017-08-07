@@ -1,6 +1,6 @@
 /*******************************************************************************
 Copyright 2016 Microchip Technology Inc. (www.microchip.com)
-  
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -37,15 +37,15 @@ typedef enum
 * PreCondition: button configured via BUTTON_SetConfiguration()
 *
 * Input: BUTTON button - enumeration of the buttons available in
-*        this demo.  They should be meaningful names and not the names 
-*        of the buttons on the silkscreen on the board (as the demo 
+*        this demo.  They should be meaningful names and not the names
+*        of the buttons on the silkscreen on the board (as the demo
 *        code may be ported to other boards).
 *         i.e. - ButtonIsPressed(BUTTON_SEND_MESSAGE);
 *
 * Output: TRUE if pressed; FALSE if not pressed.
 *
 ********************************************************************/
-bool BUTTON_IsPressed(BUTTON button);
+bool BUTTON_isPressed(BUTTON button);
 
 /*********************************************************************
 * Function: void BUTTON_Enable(BUTTON button);
@@ -63,6 +63,6 @@ bool BUTTON_IsPressed(BUTTON button);
 * Output: None
 *
 ********************************************************************/
-void BUTTON_Enable(BUTTON button);
+void BUTTON_enable(BUTTON button);
 
 #endif //BUTTONS_H

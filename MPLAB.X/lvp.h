@@ -17,30 +17,15 @@ limitations under the License.
 #include <xc.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "pinout.h"
+#include "system.h"
 
 #ifndef LVP_H
 #define	LVP_H
 
-#define _XTAL_FREQ  48000000L
-
-#define INPUT_PIN           1
-#define OUTPUT_PIN          0
-
-#define SLAVE_RUN           0
-#define SLAVE_RESET         1
-
-#define ICSP_TRIS_DAT       TRISBbits.TRISB3
-#define ICSP_DAT            LATBbits.LATB3
-#define ICSP_DAT_IN         PORTBbits.RB3
-#define ICSP_TRIS_CLK       TRISBbits.TRISB2
-#define ICSP_CLK            LATBbits.LATB2
-#define ICSP_TRIS_nMCLR     TRISBbits.TRISB4
-#define ICSP_nMCLR          LATBbits.LATB4
-
-#define  LVP_init()         LVP_exit();
-
 void ICSP_slaveReset(void);
 void ICSP_slaveRun(void);
+void ICSP_init(void);
 void LVP_enter(void);
 void LVP_exit(void);
 bool LVP_inProgress(void);

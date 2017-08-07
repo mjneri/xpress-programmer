@@ -41,15 +41,15 @@ typedef enum
 * PreCondition: LED configured via LED_Configure()
 *
 * Input: LED led - enumeration of the LEDs available in this
-*        demo.  They should be meaningful names and not the names of 
-*        the LEDs on the silkscreen on the board (as the demo code may 
+*        demo.  They should be meaningful names and not the names of
+*        the LEDs on the silkscreen on the board (as the demo code may
 *        be ported to other boards).
 *         i.e. - LED_On(LED_CONNECTION_DETECTED);
 *
 * Output: none
 *
 ********************************************************************/
-void LED_On(LED led);
+void LED_on(LED led);
 
 /*********************************************************************
 * Function: void LED_Off(LED led);
@@ -59,15 +59,15 @@ void LED_On(LED led);
 * PreCondition: LED configured via LEDConfigure()
 *
 * Input: LED led - enumeration of the LEDs available in this
-*        demo.  They should be meaningful names and not the names of 
-*        the LEDs on the silkscreen on the board (as the demo code may 
+*        demo.  They should be meaningful names and not the names of
+*        the LEDs on the silkscreen on the board (as the demo code may
 *        be ported to other boards).
 *         i.e. - LED_Off(LED_CONNECTION_DETECTED);
 *
 * Output: none
 *
 ********************************************************************/
-void LED_Off(LED led);
+void LED_off(LED led);
 
 /*********************************************************************
 * Function: void LED_Toggle(LED led);
@@ -77,15 +77,15 @@ void LED_Off(LED led);
 * PreCondition: LED configured via LEDConfigure()
 *
 * Input: LED led - enumeration of the LEDs available in this
-*        demo.  They should be meaningful names and not the names of 
-*        the LEDs on the silkscreen on the board (as the demo code may 
+*        demo.  They should be meaningful names and not the names of
+*        the LEDs on the silkscreen on the board (as the demo code may
 *        be ported to other boards).
 *         i.e. - LED_Toggle(LED_CONNECTION_DETECTED);
 *
 * Output: none
 *
 ********************************************************************/
-void LED_Toggle(LED led);
+void LED_toggle(LED led);
 
 /*********************************************************************
 * Function: bool LED_Get(LED led);
@@ -95,15 +95,15 @@ void LED_Toggle(LED led);
 * PreCondition: LED configured via LEDConfigure()
 *
 * Input: LED led - enumeration of the LEDs available in this
-*        demo.  They should be meaningful names and not the names of 
-*        the LEDs on the silkscreen on the board (as the demo code may 
+*        demo.  They should be meaningful names and not the names of
+*        the LEDs on the silkscreen on the board (as the demo code may
 *        be ported to other boards).
 *         i.e. - LED_Get(LED_CONNECTION_DETECTED);
 *
 * Output: true if on, false if off
 *
 ********************************************************************/
-bool LED_Get(LED led);
+bool LED_get(LED led);
 
 /*********************************************************************
 * Function: bool LED_Enable(LED led);
@@ -120,6 +120,6 @@ bool LED_Get(LED led);
 * Output: none
 *
 ********************************************************************/
-void LED_Enable(LED led);
+void LED_enable(LED led);
 
 #endif //LEDS_H

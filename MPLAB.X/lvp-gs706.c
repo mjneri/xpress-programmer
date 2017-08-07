@@ -55,32 +55,32 @@ uint32_t row_address = -1;  // destination address of current row
 
 void ICSP_slaveReset(void) {
     ICSP_nMCLR = SLAVE_RESET;
-    ICSP_TRIS_nMCLR = OUTPUT_PIN;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_slaveRun(void) {
     ICSP_nMCLR = SLAVE_RUN;
-    ICSP_TRIS_nMCLR = OUTPUT_PIN;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_init(void) {
     RCSTAbits.SPEN = 0; // disable UART, control I/O
     __delay_us(1);
-    ICSP_TRIS_DAT = INPUT_PIN;
+    ICSP_TRIS_DAT = PIN_INPUT;
     ICSP_CLK = 0;
-    ICSP_TRIS_CLK = OUTPUT_PIN;
+    ICSP_TRIS_CLK = PIN_OUTPUT;
     ICSP_slaveRun();
 }
 
 void ICSP_release(void) {
-    ICSP_TRIS_DAT = INPUT_PIN;
-    ICSP_TRIS_CLK = INPUT_PIN;
+    ICSP_TRIS_DAT = PIN_INPUT;
+    ICSP_TRIS_CLK = PIN_INPUT;
     //    UART_Initialize();
     ICSP_slaveRun();
 }
 
 void ICSP_controlCode(uint8_t type) {
-    ICSP_TRIS_DAT = OUTPUT_PIN;
+    ICSP_TRIS_DAT = PIN_OUTPUT;
     for (uint8_t i = 0; i < 4; i++) {
         if (type & 0x01)
             ICSP_DAT = 1;
@@ -96,7 +96,7 @@ void ICSP_controlCode(uint8_t type) {
 }
 
 void ICSP_sendWord(uint16_t w) {
-    ICSP_TRIS_DAT = OUTPUT_PIN;
+    ICSP_TRIS_DAT = PIN_OUTPUT;
     for (uint8_t i = 0; i < 16; i++) {
         if ((w & 0x8000) > 0) // Msb first
             ICSP_DAT = 1;
@@ -112,7 +112,7 @@ void ICSP_sendWord(uint16_t w) {
 
 void ICSP_sendData24(uint24_t data) {
     uint8_t i;
-    ICSP_TRIS_DAT = OUTPUT_PIN;
+    ICSP_TRIS_DAT = PIN_OUTPUT;
     for (i = 0; i < 24; i++) {
         if (data & 0x000001)
             ICSP_DAT = 1; // Lsb first
@@ -184,7 +184,7 @@ void ICSP_unlockWR(void) {
 
 uint16_t ICSP_getWord(void) {
     uint16_t w = 0;
-    ICSP_TRIS_DAT = INPUT_PIN; // PGD input
+    ICSP_TRIS_DAT = PIN_INPUT; // PGD input
     for (uint8_t i = 0; i < 16; i++) {
         ICSP_CLK = 1;
         w >>= 1; // shift right
@@ -376,8 +376,8 @@ void ICSP_rowWrite(uint16_t *row, uint24_t address, uint8_t count) {
 bool lvp = false;
 
 void LVP_enter(void) {
-    LED_On(RED_LED);
-    LED_Off(GREEN_LED);
+    LED_on(RED_LED);
+    LED_off(GREEN_LED);
 
     ICSP_init();        // configure I/Os
     ICSP_signature();   // enter LVP mode
@@ -391,8 +391,8 @@ void LVP_exit(void) {
     lvp = false;
     row_address = -1;
 
-    LED_Off(RED_LED);
-    LED_On(GREEN_LED);
+    LED_off(RED_LED);
+    LED_on(GREEN_LED);
 }
 
 bool LVP_inProgress(void) {
@@ -577,7 +577,7 @@ void read_flash(char *buffer, uint16_t seg) {
 
 void LVP_getInfo(char* buffer, uint16_t seg) {
     // read device information, returns a fixed (64 byte) string at a time
-    LVP_enter();
+    if (seg == 0) LVP_enter();
     //
     switch (seg) {
         case 0: read_DevID(buffer);  break;
@@ -590,5 +590,5 @@ void LVP_getInfo(char* buffer, uint16_t seg) {
     for (uint8_t i = strlen(buffer); i < 64; i++)
         buffer[i] = ' ';
 
-    LVP_exit();
+    if (seg == 8) LVP_exit();
 }

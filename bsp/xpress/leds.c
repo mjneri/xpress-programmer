@@ -1,8 +1,8 @@
 /*******************************************************************************
 Copyright 2016 Microchip Technology Inc. (www.microchip.com)
 
- bsp/leds.c 
- 
+ bsp/leds.c
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -20,24 +20,7 @@ limitations under the License.
 #include <leds.h>
 #include <stdbool.h>
 #include <xc.h>
-
-#define LED_D1_LAT      LATAbits.LATA0
-#define LED_D2_LAT      LATAbits.LATA1
-
-#define LED_D1_TRIS     TRISAbits.TRISA0
-#define LED_D2_TRIS     TRISAbits.TRISA1
-
-#define LED_D1_ANSEL    ANSELAbits.ANSA0
-#define LED_D2_ANSEL    ANSELAbits.ANSA1
-
-#define LED_ON  1
-#define LED_OFF 0
-
-#define PIN_INPUT           1
-#define PIN_OUTPUT          0
-
-#define PIN_DIGITAL         0
-#define PIN_ANALOG          1
+#include "pinout.h"
 
 /*********************************************************************
 * Function: void LED_On(LED led);
@@ -55,7 +38,7 @@ limitations under the License.
 * Output: none
 *
 ********************************************************************/
-void LED_On(LED led)
+void LED_on(LED led)
 {
     switch(led)
     {
@@ -66,7 +49,7 @@ void LED_On(LED led)
         case LED_D2:
             LED_D2_LAT = LED_ON;
             break;
-			
+
         case LED_NONE:
             break;
     }
@@ -88,7 +71,7 @@ void LED_On(LED led)
 * Output: none
 *
 ********************************************************************/
-void LED_Off(LED led)
+void LED_off(LED led)
 {
     switch(led)
     {
@@ -99,7 +82,7 @@ void LED_Off(LED led)
         case LED_D2:
             LED_D2_LAT = LED_OFF;
             break;
-			
+
         case LED_NONE:
             break;
     }
@@ -121,7 +104,7 @@ void LED_Off(LED led)
 * Output: none
 *
 ********************************************************************/
-void LED_Toggle(LED led)
+void LED_toggle(LED led)
 {
     switch(led)
     {
@@ -132,7 +115,7 @@ void LED_Toggle(LED led)
         case LED_D2:
             LED_D2_LAT ^= 1;
             break;
-			
+
         case LED_NONE:
             break;
     }
@@ -154,7 +137,7 @@ void LED_Toggle(LED led)
 * Output: true if on, false if off
 *
 ********************************************************************/
-bool LED_Get(LED led)
+bool LED_get(LED led)
 {
     switch(led)
     {
@@ -163,11 +146,11 @@ bool LED_Get(LED led)
 
         case LED_D2:
             return ( (LED_D2_LAT == LED_ON) ? true : false );
-			
+
         case LED_NONE:
             return false;
     }
-    
+
     return false;
 }
 
@@ -186,7 +169,7 @@ bool LED_Get(LED led)
 * Output: none
 *
 ********************************************************************/
-void LED_Enable(LED led)
+void LED_enable(LED led)
 {
     switch(led)
     {
@@ -199,7 +182,7 @@ void LED_Enable(LED led)
             LED_D2_TRIS = PIN_OUTPUT;
             LED_D1_ANSEL = PIN_DIGITAL;
             break;
-			
+
         case LED_NONE:
             break;
     }

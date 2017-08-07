@@ -34,10 +34,9 @@ limitations under the License.
  *******************************************************************/
 MAIN_RETURN main(void)
 {
-    SYSTEM_Initialize();
+    bool wasPressed = false;
 
-    USBDeviceInit();
-    USBDeviceAttach();
+    SYSTEM_init();
 
     while(1)
     {
@@ -53,15 +52,15 @@ MAIN_RETURN main(void)
         if( USBGetDeviceState() < CONFIGURED_STATE )
         {   /* USB connection not available or not yet complete */
             // implement nMCLR button
-            if ( BUTTON_IsPressed(BUTTON_S1)) {
+            if ( BUTTON_isPressed(BUTTON_S1)) {
                 ICSP_slaveReset();
-                LED_Off(GREEN_LED);     // RED = target RESET
-                LED_On (RED_LED);
+                LED_off(GREEN_LED);     // RED = target RESET
+                LED_on (RED_LED);
             }
             else { // release
                 ICSP_slaveRun();
-                LED_Off(GREEN_LED);     // not connected, battery powered?
-                LED_Off(RED_LED);       // save energy, both LED  off
+                LED_off(GREEN_LED);     // not connected, battery powered?
+                LED_off(RED_LED);       // save energy, both LED  off
             }
 
             /* Jump back to the top of the while loop. */
@@ -74,26 +73,29 @@ MAIN_RETURN main(void)
          * thus just continue back to the start of the while loop. */
         if( USBIsDeviceSuspended() == true )
         {
-            LED_Off(GREEN_LED);         // save energy, turn both LED  off
-            LED_Off(RED_LED);
+            LED_off(GREEN_LED);         // save energy, turn both LED  off
+            LED_off(RED_LED);
             ICSP_slaveReset();
             continue;                   // jump back to the top of the loop
         }
 
         // Normal operating mode (device connected)
         // implement RESET button
-        if ( BUTTON_IsPressed(BUTTON_S1)) {
-            LUNSoftDetach(0);       // mark the media as temporarily unavailable
-
+        if ( BUTTON_isPressed(BUTTON_S1)) {
+            LUNSoftDetach(0);           // mark the media as temporarily unavailable
             ICSP_slaveReset();
-            LVP_init();             // reset the programming state machine
+            ICSP_init();                // reset the ICSP interface
+            LED_on(RED_LED);
+            LED_off(GREEN_LED);
+            wasPressed = true;
         }
         else { // button released
-            LUNSoftAttach(0);                       // mark the media as available
-            if ( !LVP_inProgress()) {  // do not release during prog.!
+            LUNSoftAttach(0);           // mark the media as available
+                LED_on(GREEN_LED);      // turn off RED LED to indicate ready for download
+                LED_off(RED_LED);
+            if (wasPressed){
                 ICSP_slaveRun();
-                LED_On(GREEN_LED);   // turn off RED LED to indicate ready for download
-                LED_Off(RED_LED);
+                wasPressed = false;
             }
         }
 
