@@ -54,17 +54,14 @@ uint16_t icsp_address = 0;
 
 void ICSP_slaveReset(void){
     ICSP_nMCLR = SLAVE_RESET;
-    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_slaveRun(void){
-    ICSP_TRIS_nMCLR = PIN_INPUT;
-    ICSP_nMCLR = SLAVE_RESET;
+    ICSP_nMCLR = SLAVE_RUN;
 }
 
 void ICSP_init(void )
 {
-    RCSTAbits.SPEN = 0;         // disable UART, control I/O
     __delay_us(1);
     ICSP_TRIS_DAT = PIN_INPUT;
     ICSP_CLK = 0;
@@ -75,7 +72,6 @@ void ICSP_release(void)
 {
     ICSP_TRIS_DAT  = PIN_INPUT;
     ICSP_TRIS_CLK  = PIN_INPUT;
-    UART_init();
     ICSP_slaveRun();
 }
 
