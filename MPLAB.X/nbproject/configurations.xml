@@ -120,6 +120,7 @@
         <archiverTool>
         </archiverTool>
         <loading>
+          <loadableFile>../../Xpress BL pic18F device/MPLAB.X/dist/PIC18F25K50_XC8/production/MPLAB.X.production.hex</loadableFile>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
           <parseOnProdLoad>true</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
@@ -339,6 +340,7 @@
         <archiverTool>
         </archiverTool>
         <loading>
+          <loadableFile>../../Xpress BL pic18F device/MPLAB.X/dist/PIC18F25K50_XC8/production/MPLAB.X.production.hex</loadableFile>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
           <parseOnProdLoad>true</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
@@ -555,7 +557,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.40</languageToolchainVersion>
+        <languageToolchainVersion>1.44</languageToolchainVersion>
         <platform>4</platform>
       </toolsSet>
       <compileType>
@@ -566,6 +568,7 @@
         <archiverTool>
         </archiverTool>
         <loading>
+          <loadableFile>../../Xpress BL pic18F device/MPLAB.X/dist/PIC18F25K50_XC8/production/MPLAB.X.production.hex</loadableFile>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
           <parseOnProdLoad>true</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
@@ -657,7 +660,7 @@
         <property key="opt-xc8-linker-file" value="false"/>
         <property key="opt-xc8-linker-link_startup" value="false"/>
         <property key="opt-xc8-linker-serial" value=""/>
-        <property key="program-the-device-with-default-config-words" value="true"/>
+        <property key="program-the-device-with-default-config-words" value="false"/>
       </HI-TECH-LINK>
       <ICD3PlatformTool>
         <property key="AutoSelectMemRanges" value="auto"/>
