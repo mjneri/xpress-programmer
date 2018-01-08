@@ -106,10 +106,6 @@ uint8_t DIRECT_SectorRead(void* config, uint32_t sector_addr, uint8_t* buffer, u
                         (void*)&readme[seg*64],
                         64);  // at most 64 bytes at a time
         }
-        else if ((4 + DRV_SECTORS_PER_CLUSTER) == sector_addr) {
-            // service device.txt info
-            LVP_getInfo(buffer, seg);
-        }
     }
 	return true;
 }//end SectorRead

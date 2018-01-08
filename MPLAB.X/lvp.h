@@ -31,8 +31,6 @@ void LVP_exit(void);
 bool LVP_inProgress(void);
 void LVP_packRow(uint32_t address, uint8_t *data, uint8_t data_count);
 void LVP_programLastRow(void);
-uint16_t LVP_getInfoSize(void);
-void LVP_getInfo(char* buffer, uint16_t seg);
 
 #endif	/* LVP_H */
 

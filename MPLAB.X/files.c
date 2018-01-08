@@ -20,7 +20,6 @@ limitations under the License.
 
 #include "files.h"
 #include "string.h"
-#include "lvp.h"        // LVP_getInfoSize()
 
 //------------------------------------------------------------------------------
 //Master boot record (MBR) at LBA = 0
@@ -147,9 +146,7 @@ void FATRecordGet( uint8_t * buffer, uint8_t seg)
         buffer[1] = 0xFF;
         buffer[2] = 0xFF;
         buffer[3] = 0xFF;       // 2 - first/last cluster in short file chain
-//        buffer[4] = 0x0F;      // readme.htm
-        buffer[4] = 0xFF;       // readme.htm
-        buffer[5] = 0xFF;       // device.txt
+        buffer[4] = 0x0F;      // readme.htm
     }
 }
 
@@ -217,30 +214,6 @@ const uint8_t entry0[ ROOT_ENTRY_SIZE] = {
     sizeof(readme), 0x00, 0x00, 0x00,         // README string size (<256)
 };
 
- const  uint8_t entry2[ ROOT_ENTRY_SIZE] = {
-    'D','E','V','I','C','E',' ',' ',    // File name (exactly 8 characters)
-    'T','X','T',                        // File extension (exactly 3 characters)
-    0x20,           // specify this entry as a normal file
-    0x00,           // Reserved
-    0x00,           // Creation time, fine res 10 ms units (0-199)
-    TIMEL(MAJOR, MINOR, 0),     // Creation time, hour/min/sec
-    TIMEH(MAJOR, MINOR, 0),     // Creation time, hour/min/sec
-    DATEL(YEAR, MONTH, DAY),    // Creation date, YMD
-    DATEH(YEAR, MONTH, DAY),    // Creation date, YMD
-
-    DATEL(YEAR, MONTH, DAY),    // Last Access date, YMD
-    DATEH(YEAR, MONTH, DAY),    // Last Access date, YMD
-    0x00, 0x00,     // Extended Attributes
-
-    TIMEL(MAJOR, MINOR, 0),     // Last Modified time h/m/s
-    TIMEH(MAJOR, MINOR, 0),     // Last Modified time h/m/s
-    DATEL(YEAR, MONTH, DAY),    // Last Modified date, YMD
-    DATEH(YEAR, MONTH, DAY),    // Last Modified date, YMD
-
-    0x03, 0x00,                 // First FAT cluster (#3 is the next available)
-    64, 0x00, 0x00, 0x00,       // device info file size (default)
-};
-
 void RootRecordInit( void)
 {
     /* The root record will be created dynamically */
@@ -249,18 +222,11 @@ void RootRecordInit( void)
 void RootRecordGet( uint8_t * buffer, uint8_t seg)
 {
     memset( (void*)buffer, 0, MSD_IN_EP_SIZE);
-   if (seg == 0) {
+    if (seg == 0) {
         memcpy( (void*)&buffer[0], (const void*)entry0, ROOT_ENTRY_SIZE );
         // add the README.HTM file
         memcpy( (void*)&buffer[ ROOT_ENTRY_SIZE], (const void*)entry1, ROOT_ENTRY_SIZE );
     }
-   else if (seg == 1) {
-       memcpy( (void*)&buffer[0], (const void*)entry2, ROOT_ENTRY_SIZE );
-       // patch in the Info file size
-       uint16_t size = LVP_getInfoSize();
-       buffer[28] = size & 0xff;    // lsb
-       buffer[29] = size >> 8;      // msb
-   }
 }
 
 void RootRecordSet( uint8_t *buffer, uint8_t seg){
