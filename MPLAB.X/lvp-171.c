@@ -54,10 +54,12 @@ uint16_t icsp_address = 0;
 
 void ICSP_slaveReset(void){
     ICSP_nMCLR = SLAVE_RESET;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_slaveRun(void){
     ICSP_nMCLR = SLAVE_RUN;
+    ICSP_TRIS_nMCLR = PIN_OUTPUT;
 }
 
 void ICSP_init(void )
