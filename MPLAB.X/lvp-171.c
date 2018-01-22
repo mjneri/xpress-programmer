@@ -32,10 +32,10 @@ limitations under the License.
 #define DEV_ID      0x8006
 #define REV_ID      0x8005
 
-#define CFG_NUM      5       // number of config words
+#define CFG_NUM      2       // number of config words
 #define WRITE_TIME   3       // mem write time ms
 #define CFG_TIME     6       // cfg write time ms
-#define BULK_TIME    6       // bulk erase time ms
+#define BULK_TIME   36       // bulk erase time ms
 
 /****************************************************************************/
 // internal state

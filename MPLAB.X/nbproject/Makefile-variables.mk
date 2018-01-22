@@ -25,3 +25,10 @@ CND_ARTIFACT_PATH_BuckBoard_1779=dist/BuckBoard_1779/production/MPLAB.X.producti
 CND_PACKAGE_DIR_BuckBoard_1779=${CND_DISTDIR}/BuckBoard_1779/package
 CND_PACKAGE_NAME_BuckBoard_1779=mplab.x.tar
 CND_PACKAGE_PATH_BuckBoard_1779=${CND_DISTDIR}/BuckBoard_1779/package/mplab.x.tar
+# univ_MC506 configuration
+CND_ARTIFACT_DIR_univ_MC506=dist/univ_MC506/production
+CND_ARTIFACT_NAME_univ_MC506=MPLAB.X.production.hex
+CND_ARTIFACT_PATH_univ_MC506=dist/univ_MC506/production/MPLAB.X.production.hex
+CND_PACKAGE_DIR_univ_MC506=${CND_DISTDIR}/univ_MC506/package
+CND_PACKAGE_NAME_univ_MC506=mplab.x.tar
+CND_PACKAGE_PATH_univ_MC506=${CND_DISTDIR}/univ_MC506/package/mplab.x.tar
