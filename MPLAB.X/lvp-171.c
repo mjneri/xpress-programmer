@@ -238,7 +238,7 @@ void LVP_exit(void)
 
 bool LVP_inProgress(void)
 {
-    return (ICSP_TRIS_nMCLR == SLAVE_RESET);
+    return (ICSP_nMCLR == SLAVE_RESET);
 }
 
 void LVP_write( void){
