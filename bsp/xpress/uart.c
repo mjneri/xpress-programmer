@@ -72,7 +72,7 @@ void UART_baudrateSet(uint32_t dwBaud)
  * Output:          unsigned char c - character received 
  * Overview:        Read the input character from the UART
  *****************************************************************************/
-char UART_getch( void)
+unsigned char UART_getch( void)
 {
 	char  c;
 

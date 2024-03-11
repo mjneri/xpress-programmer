@@ -146,7 +146,7 @@ void SYSTEM_Initialize(void)
 
 			
 			
-void interrupt SYS_InterruptHigh(void)
+void __interrupt(high_priority) SYS_InterruptHigh(void)
 {
     #if defined(USB_INTERRUPT)
         USBDeviceTasks();

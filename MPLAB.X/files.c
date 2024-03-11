@@ -48,8 +48,8 @@ void MasterBootRecordGet( uint8_t * buffer, uint8_t seg)
     // Table of Primary Partitions (16 bytes/entry x 4 entries)
     // Note: Multi-byte fields are in little endian format.
     // Partition Entry 1                                                                             //0x01BE
-        buffer[ 0x1be-0x180] = 0x00;                  // Status - 0x80 (bootable), 0x00 (not bootable), other (error)
-        buffer[ 0x1bf-0x180] = 0x01;                  // Cylinder
+        buffer[0x1be - 0x180] = 0x00;                  // Status - 0x80 (bootable), 0x00 (not bootable), other (error)
+        buffer[0x1bf - 0x180] = 0x01;                  // Cylinder
     }
     else { // segment 7: 0x1c0 - 0x1ff 
         buffer[ 0x1c0-0x1c0] = 0x01;                  // Head
@@ -72,8 +72,8 @@ void MasterBootRecordGet( uint8_t * buffer, uint8_t seg)
     //Partition Entry 4
     // 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, //0x01EE
     //MBR signature         //0x01FE
-        buffer[ 0x1fe-0x1c0] = 0x55; 
-        buffer[ 0x1ff-0x1c0] = 0xAA;
+        buffer[0x1fe - 0x1c0] = 0x55; 
+        buffer[0x1ff - 0x1c0] = 0xAA;
     }
 }
 //------------------------------------------------------------------------------
@@ -127,8 +127,8 @@ void VolumeBootRecordGet( uint8_t * buffer, uint8_t seg)
 // 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 // ...
     else {
-        buffer[ 0x1fe-0x1c0] = 0x55; 
-        buffer[ 0x1ff-0x1c0] = 0xAA;			// signature End of sector (0x55AA)
+        buffer[0x1fe - 0x1c0] = 0x55; 
+        buffer[0x1ff - 0x1c0] = 0xAA;			// signature End of sector (0x55AA)
     }
 }
 
